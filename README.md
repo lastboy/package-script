@@ -5,10 +5,9 @@ Add a nodejs call to your package.json script section for spawning an external c
  e.g. install bower or grunt that are global packages as part of your module.
 
 
-First add script section to your package.json file
+## How To
 
-package.json
-===
+#### First add script section to your package.json file
 
 Add a script section to your package.json file.
 You can set the script to run in any phase according to the package.json docs
@@ -17,7 +16,7 @@ You can set the script to run in any phase according to the package.json docs
         "install": "node installer.js"
       }
 
-Then, in your javascript file:
+#### Then, in your javascript file:
 
     require('package-script').spawn([
           {
