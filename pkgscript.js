@@ -112,6 +112,7 @@ module.exports = function() {
          */
         spawn: function(config) {
             if (config && typedas.isArray(config)) {
+                commands = commands.concat(config);
                 install(commands);
 
             } else {

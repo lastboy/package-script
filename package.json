@@ -2,10 +2,7 @@
   "name": "package-script",
   "description": "Spawn external process in additional to the package install",
   "version": "0.0.1",
-  "author": {
-    "name": "Arik Lewin",
-    "url": "https://github.com/lastboy"
-  },
+  "author": "Arik Lewin (https://github.com/lastboy)",
   "homepage": "https://github.com/lastboy",
   "repository": {
     "type": "git",
@@ -47,17 +44,13 @@
     "tool"
   ],
   "dependencies": {
-    "typedas": "~1.0.0"
+    "typedas": "~1.0.0",
+    "sudo": "~1.0.3"
   },
   "devDependencies": {},
   "contributors": [
-    {
-      "name": "Arik Lewin",
-      "url": "https://github.com/lastboy"
-    }
+    "Arik Lewin (https://github.com/lastboy)"
   ],
-  "readme": "",
-  "readmeFilename": "README.md",
-  "_id": "package-script@0.0.1",
-  "_from": "package-script@~0.0.1"
+  "_from": "package-script@~0.0.1",
+  "license": "MIT"
 }
