@@ -11,7 +11,7 @@ var os = require('os'),
     },
     process,
     commands = [],
-    next= 0, size = commands.length;
+    next= 0, size;
 
 function isLinux() {
     return (os.platform() == "linux");
@@ -113,7 +113,10 @@ module.exports = function() {
         spawn: function(config) {
             if (config && typedas.isArray(config)) {
                 commands = commands.concat(config);
-                install(commands);
+                size = commands.length;
+                if (size > 0) {
+                    install(commands);
+                }
 
             } else {
                 logall("No valid configuration for 'install' function, see the docs for more information ");

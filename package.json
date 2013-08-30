@@ -25,23 +25,8 @@
     "node": ">= 0.8.0"
   },
   "keywords": [
-    "task",
-    "async",
-    "cli",
-    "minify",
-    "uglify",
-    "build",
-    "lodash",
-    "unit",
-    "test",
-    "qunit",
-    "nodeunit",
-    "server",
-    "init",
-    "scaffold",
-    "make",
-    "jake",
-    "tool"
+    "package.json",
+      "script"
   ],
   "dependencies": {
     "typedas": "~1.0.0",
