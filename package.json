@@ -1,7 +1,7 @@
 {
   "name": "package-script",
   "description": "Spawn external process in additional to the package install",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Arik Lewin (https://github.com/lastboy)",
   "homepage": "https://github.com/lastboy",
   "repository": {
