@@ -5,6 +5,10 @@ function test() {
         {
             command: "npm",
             args: ["--version"]
+        },
+        {
+            command: "npm",
+            args: ["--version"]
         }
     ]);
 }
