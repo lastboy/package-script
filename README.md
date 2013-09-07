@@ -8,7 +8,7 @@ package-script
 
 ## How To
 
-#### First add a script section to your package.json file
+#### First add a script section to your package.json file (optional)
 
 Add a script section to your package.json file.<br/>
 You can set the script to run in any phase according to the package.json docs
