@@ -26,11 +26,12 @@
   },
   "keywords": [
     "package.json",
-      "script"
+    "script"
   ],
   "dependencies": {
     "typedas": "~1.0.0",
-    "sudo": "~1.0.3"
+    "sudo": "~1.0.3",
+    "date-format-lite": "~0.5.0"
   },
   "devDependencies": {},
   "contributors": [
