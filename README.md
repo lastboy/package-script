@@ -6,6 +6,9 @@ package-script
 
 <p>It's obvious that you can use this package only for spawning if you wish to run multiple synchronized commands by configuration.</p>
 
+## Blog
+Some more information in my [blog](http://nodejscorner.blogspot.co.il/)
+
 ## How To
 
 #### First add a script section to your package.json file (optional)
@@ -32,7 +35,7 @@ You can set the script to run in any phase according to the package.json docs
 
 #### Since version 0.0.3
 * An admin configuration property that enables(default)/disables the admin cli prompt
-* An spawnopt configuration property that is the spawn options
+* A spawnopt configuration property that is the spawn options
 
 #### Reference
 
