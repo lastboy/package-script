@@ -26,7 +26,11 @@
   },
   "keywords": [
     "package.json",
-    "script"
+    "package",
+    "script",
+    "spawn",
+    "install",
+    "os"
   ],
   "dependencies": {
     "typedas": "~1.0.0",
