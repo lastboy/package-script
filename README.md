@@ -7,7 +7,7 @@ package-script
 <p>It's obvious that you can use this package only for spawning if you wish to run multiple synchronized commands by configuration.</p>
 
 ## Blog
-Some more information in my [blog](http://nodejscorner.blogspot.co.il/)
+Some more information [NodeJS Corner](http://nodejscorner.blogspot.co.il/) blog
 
 ## How To
 
