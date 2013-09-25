@@ -34,7 +34,7 @@ You can set the script to run in any phase according to the package.json docs
       ]);
 
 #### version 0.0.4
-* issue #2 fixed - switching log off
+* issue #2 fixed - switching log off (default to true)
 * Initial configuration added, it can be set via the spawn method or using a separate init method
 
 
@@ -45,7 +45,7 @@ You can set the script to run in any phase according to the package.json docs
 #### Reference
 * init(config)
     + config {Object} The initial configuration
-        + log: Switching the logger off/on optional values: [true/false]
+        + log: Switching the logger off/on optional values: [true/false] default to true
 
 * spawn(config, init)
     + config {Array} List of Objects to launch <br/>
@@ -55,7 +55,7 @@ You can set the script to run in any phase according to the package.json docs
         + spawnopt {Object} The spawn options
         + admin {boolean} The boolean flag for running the command as administrator (Linux support only for now)
     + init {Object} The initial configuration
-        + log: Switching the logger off/on optional values: [true/false]
+        + log: Switching the logger off/on optional values: [true/false] default to true
     <br/>
 
 See [child_process.spawn](http://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options) for more information
