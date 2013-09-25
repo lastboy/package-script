@@ -6,6 +6,8 @@
 "use strict";
 
 var objectutils = require("./utils/Object.js"),
+    logger = require("./utils/Logger.js"),
+    globalutils = require("./utils/Global.js"),
     utils = require("./utils/Utils.js"),
     typedas = require('typedas'),
     isLinux = utils.isLinux(),
@@ -22,6 +24,7 @@ var objectutils = require("./utils/Object.js"),
     sudoarg = require('sudo');
 
 
+
 /**
  * The default system value for the admin user is true
  *
@@ -29,6 +32,12 @@ var objectutils = require("./utils/Object.js"),
  */
 function getDefaultAdmin() {
     return true;
+}
+
+function getDefaultInit() {
+    return {
+        log: true
+    };
 }
 
 /**
@@ -53,7 +62,7 @@ function setSpawnObject(admin) {
  */
 function init() {
     var log = "Package Script installer Initialized ....";
-    utils.logall(log);
+    logger.logall(log);
 
     setSpawnObject();
 }
@@ -82,7 +91,7 @@ function install(items, callback) {
             // use sudo
             args.unshift(command);
             print = args.join(" ");
-            console.log("[package-script] Running Installer command: " + print);
+            logger.console.log("[package-script] Running Installer command: " + print);
 
             sudoopt.spawnOptions = {};
             objectutils.copy(spawnopt, sudoopt.spawnOptions);
@@ -90,7 +99,7 @@ function install(items, callback) {
         } else {
             //use child_process
             print = args.join(" ");
-            console.log("[package-script] Running Installer command: " + command + " " + print);
+            logger.console.log("[package-script] Running Installer command: " + command + " " + print);
             cprocess = spawn(command, args, spawnopt);
         }
     } else {
@@ -98,7 +107,7 @@ function install(items, callback) {
         args.unshift("/c");
         command = "cmd";
         print = [command, args.join(" ")].join(" ");
-        console.log("[package-script] Running Installer command: " + print);
+        logger.console.log("[package-script] Running Installer command: " + print);
         cprocess = spawn(command, args, spawnopt);
 
     }
@@ -106,19 +115,19 @@ function install(items, callback) {
     // -- Spawn Listeners
     cprocess.stdout.on('data', function (data) {
         var log = 'CAT Installer: ' + data;
-        utils.logall(log);
+        logger.logall(log);
     });
 
     cprocess.stderr.on('data', function (data) {
         if (data && (new String(data)).indexOf("npm ERR") != -1) {
-            utils.logall('Package Script : ' + data);
+            logger.logall('Package Script : ' + data);
         } else {
-            utils.log2file('Package Script : ' + data);
+            logger.log2file('Package Script : ' + data);
         }
     });
 
     cprocess.on('close', function (code) {
-        utils.log2file('Package Script Complete ' + code);
+        logger.log2file('Package Script Complete ' + code);
         next++;
         if (next < size) {
             install(items, callback);
@@ -133,9 +142,23 @@ function install(items, callback) {
     });
 }
 
+function initialize(config) {
+
+    var defaults = getDefaultInit(),
+        key;
+
+    if (config) {
+
+        for (key in defaults) {
+            globalutils.set(key, ( (key in config) ? config[key] :  defaults[key] ));
+        }
+    }
+}
+
 // Initialization
 (function() {
     init();
+    initialize({});
 })();
 
 /**
@@ -148,6 +171,18 @@ module.exports = function() {
     return {
 
         /**
+         * Initialization Settings
+         *
+         * @param config The initialization configuration
+         * e.g. {
+         *      log: false
+         * }
+         */
+        init: function(config) {
+            return initialize(config)
+        },
+
+        /**
          * spawn additional command according to the config
          *
          * @param config The configuration for the install
@@ -157,22 +192,30 @@ module.exports = function() {
          *          command: 'npm',
          *          args: ["--version"]
          *      }]
+         *
+         * @param init The initial configuration, can be set in separate method (see 'init')
          */
-        spawn: function(config) {
+        spawn: function(config, init) {
 
-            utils.log2file("\n\n************ Package Script  ************************************* process id: " + process.pid);
+
+            // first initialize
+            if (init) {
+                this.init(init);
+            }
+
+            logger.log2file("\n\n************ Package Script  ************************************* process id: " + process.pid);
 
             if (config && typedas.isArray(config)) {
                 commands = commands.concat(config);
                 size = commands.length;
                 if (size > 0) {
                     install(commands, function() {
-                        utils.logall("[package-script] process completed, see pkgscript.log for more information");
+                        logger.logall("[package-script] process completed, see pkgscript.log for more information");
                     });
                 }
 
             } else {
-                utils.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
+                logger.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
             }
         }
     };
