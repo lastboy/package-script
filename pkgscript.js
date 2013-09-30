@@ -211,8 +211,6 @@ function _packageProcess(config, callback) {
         logger.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
     }
 
-    console.log(configval);
-
     jsutils.NPM.installed({global: isglobal, list: names, depth:"10", debug:1}, function() {
 
         var data  = this.data,
@@ -234,8 +232,6 @@ function _packageProcess(config, callback) {
                 }
             });
         }
-
-        console.log(newarr);
 
         if (callback) {
             callback.call({data: newarr});
