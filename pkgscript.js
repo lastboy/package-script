@@ -21,7 +21,8 @@ var objectutils = require("./utils/Object.js"),
     commands = [],
     next= 0, size,
     cparg = require('child_process'),
-    sudoarg = require('sudo');
+    sudoarg = require('sudo'),
+    jsutils = require("js.utils");
 
 
 
@@ -81,6 +82,7 @@ function install(items, callback) {
         admin = item.admin,
         spawnopt = (item.spawnopt || {}),
         print;
+
 
     // set the spawn object according to the passed admin argument
     admin = setSpawnObject(admin);
@@ -151,6 +153,9 @@ function initialize(config) {
 
         for (key in defaults) {
             globalutils.set(key, ( (key in config) ? config[key] :  defaults[key] ));
+            if (jsutils) {
+                jsutils.init(config);
+            }
         }
     }
 }
@@ -160,6 +165,83 @@ function initialize(config) {
     init();
     initialize({});
 })();
+
+
+function _packageProcess(config, callback) {
+    var configval = [],
+        names = [],
+        baseobj = {
+            command: "npm",
+            args: [config.action]
+        },
+        isinstalled = config.isinstalled,
+        spawnconfig = config.config,
+        isglobal = config.global;
+
+    if (spawnconfig && typedas.isArray(spawnconfig)) {
+
+        var entry;
+
+        spawnconfig.forEach(function(item) {
+            if (item) {
+                entry = {args:[]};
+                jsutils.Object.copy(baseobj, entry);
+                if (isglobal) {
+                    entry.args.push("-g");
+                }
+                if (item.args) {
+                    entry.args = entry.args.concat(item.args);
+                }
+                if (item.name) {
+                    entry.args.push(item.name);
+                    entry.name = item.name;
+                    names.push (item.name);
+                } else {
+                    logger.console.error("[package-script install] 'name' is require parameter");
+                }
+
+                entry.admin = (('admin' in item) ? item.admin : undefined);
+                entry.spawnopt = (('spawnopt' in item) ? item.spawnopt : undefined);
+                configval.push(entry);
+            }
+        });
+
+
+    } else {
+        logger.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
+    }
+
+    console.log(configval);
+
+    jsutils.NPM.installed({global: isglobal, list: names, depth:"10", debug:1}, function() {
+
+        var data  = this.data,
+            newarr = [];
+        if (data) {
+            configval.forEach(function(item){
+                if (item) {
+                    if (item.name) {
+                        if (!isinstalled) {
+                            if (!data[item.name]) {
+                                newarr.push(item);
+                            }
+                        } else {
+                            if (data[item.name]) {
+                                newarr.push(item);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        console.log(newarr);
+
+        if (callback) {
+            callback.call({data: newarr});
+        }
+    });
+}
 
 /**
  * Executing multiple calls synchronously according to a given configuration
@@ -185,7 +267,7 @@ module.exports = function() {
         /**
          * spawn additional command according to the config
          *
-         * @param config The configuration for the install
+         * @param config The configuration for the spawn
          * e.g. [{
          *          admin: true, [optional (for now, linux support only)],
          *          spawnopt: {cwd: '.'} [optional] (see child_process spawn docs)
@@ -194,9 +276,11 @@ module.exports = function() {
          *      }]
          *
          * @param init The initial configuration, can be set in separate method (see 'init')
+         * @param callback The callback functionality
          */
-        spawn: function(config, init) {
+        spawn: function(config, init, callback) {
 
+            var me = this;
 
             // first initialize
             if (init) {
@@ -211,12 +295,116 @@ module.exports = function() {
                 if (size > 0) {
                     install(commands, function() {
                         logger.logall("[package-script] process completed, see pkgscript.log for more information");
+                        if (callback) {
+                            callback.call(me);
+                        }
                     });
                 }
 
             } else {
                 logger.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
             }
+        },
+
+        /**
+         * Install packages
+         *
+         * @param config {Array} The configuration for the install
+         *      name        {String}    The package name
+         *      admin       {Boolean}   Get admin prompt (default to true)
+         *      spawnopt    {Object}    {cwd: '.'} [optional] (see child_process spawn docs)
+         *
+         * e.g. [{
+         *          admin: false,
+         *          name: "test"
+         *      }]
+         *
+         * @param opt The optional configuration
+         *      init The initial settings
+         *          global  {Boolean} specify if the given packages are global or not
+         *          log     {Boolean} specify if to set the log to off or on optional values [true/false]
+         *
+         *      callback The callback functionality
+         */
+        install: function(config, opt) {
+
+            var me = this,
+                configvar = {},
+                callback,
+                init;
+
+            if (opt) {
+                init = (opt.init || undefined);
+                callback = (opt.callback || undefined);
+            }
+
+            configvar.action = "install";
+            configvar.isinstalled = false;
+            configvar.config = config,
+            configvar.global = ((init && 'global' in init) ? init.global : false);
+
+
+            _packageProcess(configvar, function() {
+                if (this.data && typedas.isArray(this.data) && this.data.length > 0) {
+                    me.spawn(this.data, init, function(){
+                        if (callback) {
+                            callback.call(me);
+                        }
+                    });
+                } else {
+                    if (callback) {
+                        callback.call(me);
+                    }
+
+                }
+            });
+        },
+
+        /**
+         * UnInstall packages
+         *
+         * @param config {Array} The configuration for the uninstall
+         *      name        {String}    The package name
+         *      admin       {Boolean}   Get admin prompt (default to true)
+         *      spawnopt    {Object}    {cwd: '.'} [optional] (see child_process spawn docs)
+         *
+         * e.g. [{
+         *          admin: false,
+         *          name: "test"
+         *      }]
+         *
+         * @param opt The optional configuration
+         *      init The initial settings
+         *          global  {Boolean} specify if the given packages are global or not
+         *          log     {Boolean} specify if to set the log to off or on optional values [true/false]
+         *
+         *      callback The callback functionality
+         */
+        uninstall: function(config, opt) {
+
+            var me = this,
+                configvar = {},
+                callback,
+                init;
+
+            configvar.action = "rm";
+            configvar.isinstalled = true;
+            configvar.config = config,
+            configvar.global = ((init && 'global' in init) ? init.global : false);
+
+            if (opt) {
+                init = (opt.init || undefined);
+                callback = (opt.callback || undefined);
+            }
+            _packageProcess(configvar, function() {
+                if (this.data) {
+                    me.spawn(this.data, init, function() {
+                        if (callback) {
+                            callback.call(me);
+                        }
+                    });
+                }
+            });
         }
     };
 

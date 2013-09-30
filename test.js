@@ -36,12 +36,53 @@ function test3() {
             args: ["--version"]
         },
         {
+            admin:false,
             command: "npm",
             args: ["--version"]
         }
     ]);
 }
 
+function test41() {
+    var pkgscript = require('./pkgscript.js');
+    pkgscript.install([
+        {
+            admin:true,
+            name: "bower"
+        },{
+            name: "grunt-cli"
+        }
+    ], {init: {global:true, log:false}});
+}
+
+function test42() {
+    var pkgscript = require('./pkgscript.js');
+    pkgscript.install([
+        {
+            admin:false,
+            name: "test"
+        }
+    ], {callback: function() {
+
+        var pkgscript = require('./pkgscript.js');
+        pkgscript.uninstall([
+            {
+                admin:false,
+                name: "test"
+            }
+        ], {callback: function() {
+
+            console.log(" Test completed... ");
+        }});
+
+
+    }});
+
+}
+
+
 //test1();
 //test2();
+//test41();
+//test42();
 test3();
