@@ -50,6 +50,7 @@ Note: The install and uninstall methods have a validation process for checking <
 * depth and debug attributes were added to the optional arguments of the install/uninstall methods
 * js.utils dependency upgrade (npm list info, improved)
 * local Object utils removed, using js.utils instead
+* MAC is now supported
 
 #### version 0.0.5
 * issue #1 fixed - Checking if packages already exist
