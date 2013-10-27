@@ -45,6 +45,12 @@ You can set the script to run in any phase according to the package.json docs
 Note: The install and uninstall methods have a validation process for checking <br/>
     if the package already installed/uninstalled
 
+
+#### version 0.0.7
+* depth and debug attributes were added to the optional arguments of the install/uninstall methods
+* js.utils dependency upgrade (npm list info, improved)
+* local Object utils removed, using js.utils instead
+
 #### version 0.0.5
 * issue #1 fixed - Checking if packages already exist
     See install and uninstall methods, also look into js.utils package (NPM)
@@ -85,6 +91,10 @@ Note: The install and uninstall methods have a validation process for checking <
     + opt {Object} The optional configuration
         + init {Object} The initial configuration
             + log: Switching the logger off/on optional values: [true/false]
+        + debug {Number}
+            + 0: set debug to off (default)
+            + 1: set debug to on
+        + depth {String} The npm tree info dependencies hierarchy depth (see 'npm list' for more info)
         + callback {Function} The callback functionality
     <br/>
 
@@ -96,6 +106,10 @@ Note: The install and uninstall methods have a validation process for checking <
     + opt {Object} The optional configuration
         + init {Object} The initial configuration
             + log: Switching the logger off/on optional values: [true/false]
+        + debug {Number}
+            + 0: set debug to off (default)
+            + 1: set debug to on
+        + depth {String} The npm tree info dependencies hierarchy depth (see 'npm list' for more info)
         + callback {Function} The callback functionality
     <br/>
 
