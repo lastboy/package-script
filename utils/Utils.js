@@ -15,7 +15,8 @@ module.exports = function () {
          * @returns {boolean} in case running OS is linux return true else false
          */
         isLinux: function () {
-            return (os.platform() == "linux");
+            var platform = os.platform();
+            return (platform == "linux" || platform == "darwin");
         }
 
     };
