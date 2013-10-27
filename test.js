@@ -45,6 +45,18 @@ function test3() {
 
 function test41() {
     var pkgscript = require('./pkgscript.js');
+    pkgscript.uninstall([
+        {
+            admin:true,
+            name: "bower"
+        },{
+            name: "grunt-cli"
+        }
+    ], {init: {global:true, log:true}});
+}
+
+function test412() {
+    var pkgscript = require('./pkgscript.js');
     pkgscript.install([
         {
             admin:true,
@@ -52,7 +64,9 @@ function test41() {
         },{
             name: "grunt-cli"
         }
-    ], {init: {global:true, log:false}});
+    ], {init: {global:true, log:true}, callback: function() {
+        console.log(" Test completed... ");
+    }});
 }
 
 function test42() {
@@ -70,7 +84,7 @@ function test42() {
                 admin:false,
                 name: "test"
             }
-        ], {callback: function() {
+        ], {debug: 1, depth: "10", callback: function() {
 
             console.log(" Test completed... ");
         }});
@@ -84,5 +98,6 @@ function test42() {
 //test1();
 //test2();
 //test41();
-//test42();
-test3();
+//test412();
+test42();
+//test3();
