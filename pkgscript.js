@@ -5,8 +5,7 @@
 
 "use strict";
 
-var objectutils = require("./utils/Object.js"),
-    logger = require("./utils/Logger.js"),
+var logger = require("./utils/Logger.js"),
     globalutils = require("./utils/Global.js"),
     utils = require("./utils/Utils.js"),
     typedas = require('typedas'),
@@ -96,7 +95,7 @@ function install(items, callback) {
             logger.console.log("[package-script] Running Installer command: " + print);
 
             sudoopt.spawnOptions = {};
-            objectutils.copy(spawnopt, sudoopt.spawnOptions);
+            jsutils.Object.copy(spawnopt, sudoopt.spawnOptions);
             cprocess = spawn(args, sudoopt);
         } else {
             //use child_process
@@ -176,11 +175,12 @@ function _packageProcess(config, callback) {
         },
         isinstalled = config.isinstalled,
         spawnconfig = config.config,
-        isglobal = config.global;
+        isglobal = config.global,
+        isDebug = ('debug' in config ? (config.debug || 0) : 0),
+        depth = ('depth' in config ? (config.depth || "10") : "10"),
+        entry;
 
     if (spawnconfig && typedas.isArray(spawnconfig)) {
-
-        var entry;
 
         spawnconfig.forEach(function(item) {
             if (item) {
@@ -211,7 +211,7 @@ function _packageProcess(config, callback) {
         logger.logall("[package-script] No valid configuration for 'install' function, see the docs for more information ");
     }
 
-    jsutils.NPM.installed({global: isglobal, list: names, depth:"10", debug:1}, function() {
+    jsutils.NPM.installed({global: isglobal, list: names, depth:depth, debug:isDebug}, function() {
 
         var data  = this.data,
             newarr = [];
@@ -302,6 +302,8 @@ module.exports = function() {
             }
         },
 
+        // TODO unify to generic - the configuration passed to the install/uninstall
+
         /**
          * Install packages
          *
@@ -332,13 +334,20 @@ module.exports = function() {
             if (opt) {
                 init = (opt.init || undefined);
                 callback = (opt.callback || undefined);
+            } else {
+                opt = {};
             }
 
             configvar.action = "install";
             configvar.isinstalled = false;
             configvar.config = config,
             configvar.global = ((init && 'global' in init) ? init.global : false);
+            configvar.debug = opt.debug;
+            configvar.depth = opt.depth;
 
+            if (init) {
+                this.init(init);
+            }
 
             _packageProcess(configvar, function() {
                 if (this.data && typedas.isArray(this.data) && this.data.length > 0) {
@@ -383,15 +392,24 @@ module.exports = function() {
                 callback,
                 init;
 
+            if (opt) {
+                init = (opt.init || undefined);
+                callback = (opt.callback || undefined);
+            } else {
+                opt = {};
+            }
+
             configvar.action = "rm";
             configvar.isinstalled = true;
             configvar.config = config,
             configvar.global = ((init && 'global' in init) ? init.global : false);
+            configvar.debug = opt.debug;
+            configvar.depth = opt.depth;
 
-            if (opt) {
-                init = (opt.init || undefined);
-                callback = (opt.callback || undefined);
+            if (init) {
+                this.init(init);
             }
+
             _packageProcess(configvar, function() {
                 if (this.data) {
                     me.spawn(this.data, init, function() {
