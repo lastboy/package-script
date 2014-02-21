@@ -30,6 +30,7 @@ You can set the script to run in any phase according to the package.json docs
           {
               command: "npm",
               args: ["install", "-g", "bower"]
+          }
 
       ]);
 
