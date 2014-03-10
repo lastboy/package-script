@@ -6,6 +6,8 @@ package-script
 
 <p>It's obvious that you can use this package for running multiple synchronized commands by configuration.</p>
 
+<p>Note: In some cases, if you can somehow use global packages as a module e.g. require("bower") instead of using it globaly and avoid installing it in your package script it would be a best practice. But sometimes it's inevetable... </p>
+
 ## Blog
 Some more information [NodeJS Corner](http://nodejscorner.blogspot.co.il/) blog
 
