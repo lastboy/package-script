@@ -4,7 +4,7 @@ package-script
 <p>Add a cross OS nodejs call to your package.json script section for spawning an external commands.
  e.g. install bower or grunt that are global packages as part of your module.</p>
 
-<p>It's obvious that you can use this package not only for spawning but if you wish to run multiple synchronized commands by configuration.</p>
+<p>It's obvious that you can use this package for running multiple synchronized commands by configuration.</p>
 
 ## Blog
 Some more information [NodeJS Corner](http://nodejscorner.blogspot.co.il/) blog
