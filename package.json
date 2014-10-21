@@ -1,7 +1,7 @@
 {
   "name": "package-script",
   "description": "Spawn external process in additional to the package install",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "Arik Lewin (https://github.com/lastboy)",
   "homepage": "https://github.com/lastboy",
   "repository": {
@@ -33,10 +33,10 @@
     "os"
   ],
   "dependencies": {
-    "typedas": "~1.0.0",
     "sudo": "~1.0.3",
     "date-format-lite": "~0.5.0",
-    "js.utils": "~0.1.2"
+    "js.utils": "~0.2.0",
+    "underscore": "~1.7.0"
   },
   "devDependencies": {},
   "contributors": [

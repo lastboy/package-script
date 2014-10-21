@@ -8,7 +8,7 @@
 var logger = require("./utils/Logger.js"),
     globalutils = require("./utils/Global.js"),
     utils = require("./utils/Utils.js"),
-    typedas = require('typedas'),
+    _ = require('underscore'),
     isLinux = utils.isLinux(),
     spawn,
     sudoopt = {
@@ -135,7 +135,7 @@ function install(items, callback) {
 
         } else {
             // callback
-            if (callback && typedas.isFunction(callback)) {
+            if (callback && _.isFunction(callback)) {
                 callback.call(this, code);
 
             }
@@ -180,7 +180,7 @@ function _packageProcess(config, callback) {
         depth = ('depth' in config ? (config.depth || "10") : "10"),
         entry;
 
-    if (spawnconfig && typedas.isArray(spawnconfig)) {
+    if (spawnconfig && _.isArray(spawnconfig)) {
 
         spawnconfig.forEach(function(item) {
             if (item) {
@@ -285,7 +285,7 @@ module.exports = function() {
 
             logger.log2file("\n\n************ Package Script  ************************************* process id: " + process.pid);
 
-            if (config && typedas.isArray(config)) {
+            if (config && _.isArray(config)) {
                 commands = commands.concat(config);
                 size = commands.length;
                 if (size > 0) {
@@ -350,7 +350,7 @@ module.exports = function() {
             }
 
             _packageProcess(configvar, function() {
-                if (this.data && typedas.isArray(this.data) && this.data.length > 0) {
+                if (this.data && _.isArray(this.data) && this.data.length > 0) {
                     me.spawn(this.data, init, function(){
                         if (callback) {
                             callback.call(me);
