@@ -94,6 +94,7 @@ Note: The install and uninstall methods have a validation process for checking <
         + admin {boolean} The boolean flag for running the command as administrator (Linux support only for now)
     + opt {Object} The optional configuration
         + init {Object} The initial configuration
+            + global {Boolean} specify if the given packages are global or not
             + log: Switching the logger off/on optional values: [true/false]
         + debug {Number}
             + 0: set debug to off (default)
@@ -109,6 +110,7 @@ Note: The install and uninstall methods have a validation process for checking <
         + admin {boolean} The boolean flag for running the command as administrator (Linux support only for now)
     + opt {Object} The optional configuration
         + init {Object} The initial configuration
+            + global {Boolean} specify if the given packages are global or not
             + log: Switching the logger off/on optional values: [true/false]
         + debug {Number}
             + 0: set debug to off (default)
